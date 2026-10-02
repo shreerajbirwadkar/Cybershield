@@ -1,0 +1,3110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>CyberShield - Cyber Security Awareness</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    scroll-behavior:smooth;
+}
+
+body{
+    font-family:Arial, Helvetica, sans-serif;
+    background:#050b14;
+    color:#eaf6ff;
+    line-height:1.6;
+}
+
+nav{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:#07111f;
+    border-bottom:1px solid #12304d;
+    padding:15px 6%;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.logo{
+    font-size:24px;
+    font-weight:bold;
+    color:#00eaff;
+}
+
+nav ul{
+    list-style:none;
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+nav a{
+    color:#d9f7ff;
+    text-decoration:none;
+    font-size:14px;
+}
+
+nav a:hover{
+    color:#00eaff;
+}
+
+.hero{
+    min-height:90vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:40px 20px;
+    background:
+    radial-gradient(circle at top,#12355a 0,#07111f 40%,#050b14 75%);
+}
+
+.hero-content{
+    max-width:900px;
+}
+
+.shield{
+    font-size:80px;
+    margin-bottom:15px;
+}
+
+.hero h1{
+    font-size:55px;
+    color:#00eaff;
+    margin-bottom:15px;
+}
+
+.hero p{
+    font-size:20px;
+    color:#b8c9d8;
+    margin-bottom:30px;
+}
+
+.btn{
+    display:inline-block;
+    padding:13px 25px;
+    border-radius:8px;
+    background:#00eaff;
+    color:#001018;
+    text-decoration:none;
+    font-weight:bold;
+    border:none;
+    cursor:pointer;
+    margin:5px;
+}
+
+.btn:hover{
+    background:#00bcd4;
+    transform:translateY(-2px);
+}
+
+.btn:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+    transform:none;
+}
+
+section{
+    padding:70px 7%;
+}
+
+.section-title{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.section-title h2{
+    font-size:34px;
+    color:#00eaff;
+}
+
+.section-title p{
+    color:#9db1c2;
+    margin-top:8px;
+}
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:#091725;
+    border:1px solid #163955;
+    border-radius:14px;
+    padding:25px;
+    transition:.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:#00eaff;
+    box-shadow:0 10px 30px rgba(0,234,255,.12);
+}
+
+.card h3{
+    color:#00eaff;
+    margin-bottom:10px;
+}
+
+.card p{
+    color:#b7c7d5;
+}
+
+.form-box{
+    max-width:900px;
+    margin:auto;
+    background:#091725;
+    padding:30px;
+    border-radius:15px;
+    border:1px solid #163955;
+}
+
+.form-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:18px;
+}
+
+.form-group{
+    margin-bottom:15px;
+}
+
+.form-group.full{
+    grid-column:1/-1;
+}
+
+label{
+    display:block;
+    margin-bottom:7px;
+    color:#bfeeff;
+    font-weight:bold;
+}
+
+input,
+select,
+textarea{
+    width:100%;
+    padding:12px;
+    border-radius:7px;
+    border:1px solid #214766;
+    background:#050d17;
+    color:white;
+    outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#00eaff;
+}
+
+select option{
+    background:#07111f;
+    color:white;
+}
+
+textarea{
+    min-height:120px;
+    resize:vertical;
+}
+
+.form-help{
+    font-size:12px;
+    color:#829bad;
+    margin-top:5px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.stat{
+    background:#091725;
+    border:1px solid #163955;
+    padding:25px;
+    text-align:center;
+    border-radius:14px;
+}
+
+.stat-number{
+    font-size:40px;
+    font-weight:bold;
+    color:#00eaff;
+}
+
+.stat-title{
+    color:#9fb4c6;
+}
+
+.awareness-card{
+    overflow:hidden;
+}
+
+.awareness-card img{
+    width:100%;
+    height:170px;
+    object-fit:cover;
+    border-radius:10px;
+    margin-bottom:15px;
+}
+
+.tips{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
+}
+
+.tip{
+    background:#091725;
+    border-left:4px solid #00eaff;
+    padding:20px;
+    border-radius:8px;
+}
+
+.quiz-box{
+    max-width:800px;
+    margin:auto;
+    background:#091725;
+    border:1px solid #163955;
+    border-radius:15px;
+    padding:30px;
+}
+
+.progress{
+    width:100%;
+    height:10px;
+    background:#142333;
+    border-radius:20px;
+    margin:20px 0;
+    overflow:hidden;
+}
+
+.progress-bar{
+    width:0%;
+    height:100%;
+    background:#00eaff;
+    transition:.3s;
+}
+
+.question{
+    font-size:22px;
+    margin-bottom:20px;
+}
+
+.options{
+    display:grid;
+    gap:12px;
+}
+
+.option{
+    padding:14px;
+    border:1px solid #214766;
+    border-radius:8px;
+    cursor:pointer;
+    background:#07111c;
+}
+
+.option:hover{
+    border-color:#00eaff;
+}
+
+.option.correct{
+    background:#123d2d;
+    border-color:#2cff95;
+}
+
+.option.wrong{
+    background:#421d25;
+    border-color:#ff4f70;
+}
+
+.feedback{
+    margin-top:15px;
+    font-weight:bold;
+}
+
+.quiz-result{
+    text-align:center;
+    padding:20px;
+}
+
+.score-big{
+    font-size:55px;
+    color:#00eaff;
+}
+
+.admin-box{
+    background:#091725;
+    border:1px solid #163955;
+    padding:25px;
+    border-radius:15px;
+    margin-bottom:25px;
+}
+
+.admin-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:15px;
+}
+
+.admin-stat{
+    background:#050d17;
+    border:1px solid #1c3c56;
+    border-radius:10px;
+    padding:20px;
+    text-align:center;
+}
+
+.admin-stat strong{
+    display:block;
+    font-size:30px;
+    color:#00eaff;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+
+th,
+td{
+    border:1px solid #1c3c56;
+    padding:10px;
+    text-align:left;
+}
+
+th{
+    color:#00eaff;
+    background:#07111f;
+}
+
+td{
+    color:#c5d4df;
+}
+
+.certificate{
+    max-width:800px;
+    margin:30px auto;
+    padding:45px;
+    text-align:center;
+    border:3px solid #00eaff;
+    background:#081522;
+    border-radius:10px;
+    display:none;
+}
+
+.certificate h2{
+    color:#00eaff;
+    font-size:35px;
+}
+
+.certificate h3{
+    font-size:30px;
+    margin:20px;
+}
+
+.stars{
+    display:flex;
+    gap:8px;
+    margin-bottom:15px;
+}
+
+.star{
+    font-size:30px;
+    cursor:pointer;
+    color:#526273;
+}
+
+.star.active{
+    color:#ffd43b;
+}
+
+footer{
+    text-align:center;
+    padding:30px;
+    border-top:1px solid #163955;
+    color:#7890a3;
+}
+
+.hidden{
+    display:none !important;
+}
+
+.message{
+    margin-top:15px;
+    padding:12px;
+    border-radius:7px;
+    background:#103426;
+    color:#73ffbd;
+    display:none;
+}
+
+.message.error{
+    background:#421d25;
+    color:#ff8da2;
+}
+
+.registration-note{
+    background:#071522;
+    border-left:4px solid #00eaff;
+    padding:15px;
+    margin-bottom:25px;
+    border-radius:7px;
+    color:#a9c2d3;
+}
+
+.required{
+    color:#ff5f7a;
+}
+
+.server-status{
+    margin-top:15px;
+    padding:10px;
+    border-radius:7px;
+    background:#07111f;
+    color:#9db1c2;
+    font-size:13px;
+}
+
+.db-badge{
+    display:inline-block;
+    margin-top:8px;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:12px;
+    background:#103426;
+    color:#73ffbd;
+}
+
+@media(max-width:700px){
+
+    nav{
+        flex-direction:column;
+        gap:12px;
+    }
+
+    nav ul{
+        justify-content:center;
+        gap:12px;
+    }
+
+    .hero h1{
+        font-size:38px;
+    }
+
+    .hero p{
+        font-size:17px;
+    }
+
+    .form-grid{
+        grid-template-columns:1fr;
+    }
+
+    .form-group.full{
+        grid-column:auto;
+    }
+
+    section{
+        padding:55px 5%;
+    }
+
+    table{
+        font-size:12px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- =====================================================
+     NAVBAR
+===================================================== -->
+
+<nav>
+
+<div class="logo">
+🛡 CyberShield
+</div>
+
+<ul>
+
+<li><a href="#home">Home</a></li>
+<li><a href="#register">Register</a></li>
+<li><a href="#statistics">Statistics</a></li>
+<li><a href="#awareness">Awareness</a></li>
+<li><a href="#tips">Safety Tips</a></li>
+<li><a href="#quiz">Quiz</a></li>
+<li><a href="#feedback">Feedback</a></li>
+<li><a href="#admin">Admin</a></li>
+
+</ul>
+
+</nav>
+
+
+<!-- =====================================================
+     HERO
+===================================================== -->
+
+<section class="hero" id="home">
+
+<div class="hero-content">
+
+<div class="shield">
+🛡️
+</div>
+
+<h1>CyberShield</h1>
+
+<p>
+Cyber Security Awareness & Assessment System
+</p>
+
+<p>
+Learn how to protect your identity, devices,
+accounts and personal information from cyber threats.
+</p>
+
+<a href="#register" class="btn">
+Get Started
+</a>
+
+<a href="#quiz" class="btn">
+Take Quiz
+</a>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     REGISTER
+===================================================== -->
+
+<section id="register">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Visitor Registration</h2>
+
+<p>
+Enter basic information to participate in the awareness program.
+</p>
+
+</div>
+
+<div class="form-box">
+
+<div class="registration-note">
+
+<strong>🔐 Privacy Notice:</strong>
+
+Your basic information is collected only for
+CyberShield awareness program statistics and assessment.
+
+</div>
+
+<form id="registrationForm">
+
+<div class="form-grid">
+
+<div class="form-group">
+
+<label for="name">
+Full Name <span class="required">*</span>
+</label>
+
+<input
+type="text"
+id="name"
+placeholder="Enter your full name"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="age">
+Age <span class="required">*</span>
+</label>
+
+<input
+type="number"
+id="age"
+min="10"
+max="100"
+placeholder="Enter your age"
+required
+>
+
+</div>
+
+
+<div class="form-group">
+
+<label for="studentStatus">
+Are you a Student? <span class="required">*</span>
+</label>
+
+<select
+id="studentStatus"
+onchange="toggleStudentFields()"
+required
+>
+
+<option value="">Select Status</option>
+<option value="Yes">Yes - Student</option>
+<option value="No">No - Non-Student</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group studentField hidden">
+
+<label for="educationLevel">
+Education Level <span class="required">*</span>
+</label>
+
+<select id="educationLevel">
+
+<option value="">Select Education Level</option>
+<option value="School">School</option>
+<option value="Junior College">Junior College</option>
+<option value="Undergraduate">Undergraduate</option>
+<option value="Postgraduate">Postgraduate</option>
+<option value="Diploma">Diploma</option>
+<option value="ITI">ITI</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group studentField hidden">
+
+<label for="year">
+Class / Year <span class="required">*</span>
+</label>
+
+<select id="year">
+
+<option value="">Select Year</option>
+<option value="1st Year">1st Year</option>
+<option value="2nd Year">2nd Year</option>
+<option value="3rd Year">3rd Year</option>
+<option value="4th Year">4th Year</option>
+<option value="Final Year">Final Year</option>
+<option value="11th">11th</option>
+<option value="12th">12th</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group studentField hidden">
+
+<label for="branch">
+Main Branch / Course <span class="required">*</span>
+</label>
+
+<select
+id="branch"
+onchange="updateSubBranch()"
+>
+
+<option value="">Select Main Branch / Course</option>
+
+<option value="BCA">BCA</option>
+<option value="B.Sc">B.Sc</option>
+<option value="BBA">BBA</option>
+<option value="B.Com">B.Com</option>
+<option value="B.A">B.A</option>
+<option value="B.E / B.Tech">B.E / B.Tech</option>
+<option value="MCA">MCA</option>
+<option value="M.Sc">M.Sc</option>
+<option value="MBA">MBA</option>
+<option value="M.Com">M.Com</option>
+<option value="M.A">M.A</option>
+<option value="M.E / M.Tech">M.E / M.Tech</option>
+<option value="Diploma">Diploma</option>
+<option value="ITI">ITI</option>
+<option value="11th / 12th">11th / 12th</option>
+<option value="Other">Other</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group studentField hidden">
+
+<label for="subBranch">
+Sub Branch / Specialization
+</label>
+
+<select id="subBranch">
+
+<option value="">
+Select Sub Branch / Specialization
+</option>
+
+</select>
+
+<div class="form-help">
+Sub-branch options will change according to your selected course.
+</div>
+
+</div>
+
+
+<div class="form-group occupationField hidden">
+
+<label for="occupation">
+Occupation <span class="required">*</span>
+</label>
+
+<select id="occupation">
+
+<option value="">Select Occupation</option>
+<option value="Teacher">Teacher</option>
+<option value="Engineer">Engineer</option>
+<option value="Doctor">Doctor</option>
+<option value="Business">Business</option>
+<option value="Government Employee">Government Employee</option>
+<option value="Private Employee">Private Employee</option>
+<option value="Farmer">Farmer</option>
+<option value="Self Employed">Self Employed</option>
+<option value="Retired">Retired</option>
+<option value="Other">Other</option>
+
+</select>
+
+</div>
+
+
+<div class="form-group full">
+
+<button
+class="btn"
+type="submit"
+id="registerButton"
+>
+Register Visitor
+</button>
+
+</div>
+
+</div>
+
+</form>
+
+
+<div
+id="registerMessage"
+class="message"
+></div>
+
+
+<div
+id="serverStatus"
+class="server-status"
+>
+Backend: Checking connection...
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     STATISTICS
+===================================================== -->
+
+<section id="statistics">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Website Statistics</h2>
+
+<p>
+Live statistics loaded directly from the CyberShield SQLite database.
+</p>
+
+</div>
+
+<div class="stats">
+
+<div class="stat">
+
+<div
+class="stat-number"
+id="visitorCount"
+>
+0
+</div>
+
+<div class="stat-title">
+Registered Visitors
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div
+class="stat-number"
+id="quizAttempts"
+>
+0
+</div>
+
+<div class="stat-title">
+Quiz Attempts
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div
+class="stat-number"
+id="averageScore"
+>
+0%
+</div>
+
+<div class="stat-title">
+Average Quiz Score
+</div>
+
+</div>
+
+
+<div class="stat">
+
+<div class="stat-number">
+6+
+</div>
+
+<div class="stat-title">
+Awareness Topics
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     AWARENESS
+===================================================== -->
+
+<section id="awareness">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Cyber Security Awareness</h2>
+
+<p>
+Understand common cyber threats.
+</p>
+
+</div>
+
+<div class="cards">
+
+<div class="card awareness-card">
+
+<img
+src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80"
+alt="Phishing awareness"
+>
+
+<h3>🎣 Phishing</h3>
+
+<p>
+Phishing is a cyber attack where criminals use fake
+emails, messages or websites to steal sensitive information.
+</p>
+
+</div>
+
+
+<div class="card awareness-card">
+
+<img
+src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=800&q=80"
+alt="Password security"
+>
+
+<h3>🔐 Password Security</h3>
+
+<p>
+Use long, unique passwords and avoid using the same
+password on multiple websites.
+</p>
+
+</div>
+
+
+<div class="card awareness-card">
+
+<img
+src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=800&q=80"
+alt="Mobile security"
+>
+
+<h3>📱 Mobile Security</h3>
+
+<p>
+Install applications only from trusted sources and keep
+your mobile operating system updated.
+</p>
+
+</div>
+
+
+<div class="card awareness-card">
+
+<img
+src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=800&q=80"
+alt="Safe browsing"
+>
+
+<h3>🌐 Safe Browsing</h3>
+
+<p>
+Check website addresses carefully and avoid downloading
+files from suspicious websites.
+</p>
+
+</div>
+
+
+<div class="card awareness-card">
+
+<img
+src="https://images.unsplash.com/photo-1633265486064-086b219458ec?auto=format&fit=crop&w=800&q=80"
+alt="Online scams"
+>
+
+<h3>💳 Online Scams</h3>
+
+<p>
+Never share OTPs, PINs, passwords or banking information
+with unknown people.
+</p>
+
+</div>
+
+
+<div class="card awareness-card">
+
+<img
+src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80"
+alt="Two factor authentication"
+>
+
+<h3>🔑 Two-Factor Authentication</h3>
+
+<p>
+2FA provides an additional layer of security beyond your
+password.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     SAFETY TIPS
+===================================================== -->
+
+<section id="tips">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Cyber Safety Tips</h2>
+
+<p>
+Simple habits can improve your online security.
+</p>
+
+</div>
+
+<div class="tips">
+
+<div class="tip">
+
+<strong>🔐 Use Strong Passwords</strong>
+
+<p>
+Create long and unique passwords for important accounts.
+</p>
+
+</div>
+
+
+<div class="tip">
+
+<strong>🚫 Never Share OTP</strong>
+
+<p>
+Banks and legitimate services do not require you to share OTPs.
+</p>
+
+</div>
+
+
+<div class="tip">
+
+<strong>📲 Enable 2FA</strong>
+
+<p>
+Use two-factor authentication wherever possible.
+</p>
+
+</div>
+
+
+<div class="tip">
+
+<strong>🔄 Update Software</strong>
+
+<p>
+Install security updates and patches regularly.
+</p>
+
+</div>
+
+
+<div class="tip">
+
+<strong>📧 Verify Emails</strong>
+
+<p>
+Check the sender and link before clicking.
+</p>
+
+</div>
+
+
+<div class="tip">
+
+<strong>💾 Backup Data</strong>
+
+<p>
+Keep important files backed up in a safe location.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     QUIZ
+===================================================== -->
+
+<section id="quiz">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Cyber Security Quiz</h2>
+
+<p>
+Test your cyber security knowledge.
+</p>
+
+</div>
+
+
+<div
+class="quiz-box"
+id="quizBox"
+>
+
+<div id="quizStart">
+
+<h3>Ready to test your knowledge?</h3>
+
+<p>
+This quiz contains 10 questions.
+Your score will be calculated automatically.
+</p>
+
+<button
+class="btn"
+onclick="startQuiz()"
+>
+Start Quiz
+</button>
+
+</div>
+
+
+<div
+id="quizArea"
+class="hidden"
+>
+
+<div>
+Question
+<span id="questionNumber">1</span>
+/
+10
+</div>
+
+<div class="progress">
+
+<div
+class="progress-bar"
+id="progressBar"
+></div>
+
+</div>
+
+<div
+class="question"
+id="questionText"
+></div>
+
+<div
+class="options"
+id="options"
+></div>
+
+<div
+class="feedback"
+id="quizFeedback"
+></div>
+
+</div>
+
+
+<div
+id="quizResult"
+class="hidden quiz-result"
+>
+
+<h2>Quiz Completed!</h2>
+
+<div
+class="score-big"
+id="finalScore"
+></div>
+
+<p id="resultText"></p>
+
+<button
+class="btn"
+onclick="restartQuiz()"
+>
+Try Again
+</button>
+
+<button
+class="btn"
+onclick="generateCertificate()"
+>
+Get Certificate
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CERTIFICATE
+===================================================== -->
+
+<section>
+
+<div
+class="certificate"
+id="certificate"
+>
+
+<h2>🏆 Certificate of Achievement</h2>
+
+<p>
+This certificate is presented to
+</p>
+
+<h3 id="certificateName">
+Cyber Security Learner
+</h3>
+
+<p>
+for successfully completing the
+CyberShield Cyber Security Awareness Quiz.
+</p>
+
+<p>
+Score:
+<strong id="certificateScore"></strong>
+</p>
+
+<p>
+Date:
+<strong id="certificateDate"></strong>
+</p>
+
+<br>
+
+<button
+class="btn"
+onclick="window.print()"
+>
+Print Certificate
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FEEDBACK
+===================================================== -->
+
+<section id="feedback">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>User Feedback</h2>
+
+<p>
+Tell us about your experience.
+</p>
+
+</div>
+
+
+<div class="form-box">
+
+<form id="feedbackForm">
+
+<label>
+Rating
+</label>
+
+<div class="stars">
+
+<span class="star" data-rating="1">★</span>
+<span class="star" data-rating="2">★</span>
+<span class="star" data-rating="3">★</span>
+<span class="star" data-rating="4">★</span>
+<span class="star" data-rating="5">★</span>
+
+</div>
+
+<input
+type="hidden"
+id="rating"
+>
+
+<label>
+Feedback
+</label>
+
+<textarea
+id="feedbackText"
+placeholder="Write your feedback..."
+required
+></textarea>
+
+<br>
+
+<button
+class="btn"
+type="submit"
+id="feedbackButton"
+>
+Submit Feedback
+</button>
+
+</form>
+
+<div
+id="feedbackMessage"
+class="message"
+></div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     ADMIN
+===================================================== -->
+
+<section id="admin">
+
+<div class="container">
+
+<div class="section-title">
+
+<h2>Admin Dashboard</h2>
+
+<p>
+Registration, quiz and feedback data loaded from SQLite database.
+</p>
+
+</div>
+
+
+<div class="admin-box">
+
+<h3>Dashboard Statistics</h3>
+
+<br>
+
+<div class="admin-grid">
+
+<div class="admin-stat">
+
+<strong id="adminVisitors">0</strong>
+
+Total Visitors
+
+</div>
+
+
+<div class="admin-stat">
+
+<strong id="adminStudents">0</strong>
+
+Students
+
+</div>
+
+
+<div class="admin-stat">
+
+<strong id="adminNonStudents">0</strong>
+
+Non-Students
+
+</div>
+
+
+<div class="admin-stat">
+
+<strong id="adminQuiz">0</strong>
+
+Quiz Attempts
+
+</div>
+
+
+<div class="admin-stat">
+
+<strong id="adminRating">0</strong>
+
+Average Rating
+
+</div>
+
+</div>
+
+</div>
+
+
+<div class="admin-box">
+
+<h3>Registered Visitors</h3>
+
+<div style="overflow-x:auto">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>ID</th>
+<th>Name</th>
+<th>Age</th>
+<th>Student</th>
+<th>Education</th>
+<th>Year</th>
+<th>Branch</th>
+<th>Sub Branch</th>
+<th>Occupation</th>
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody id="visitorTable">
+
+<tr>
+<td colspan="10">
+Loading visitor data...
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="admin-box">
+
+<h3>Recent Feedback</h3>
+
+<div style="overflow-x:auto">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Rating</th>
+<th>Feedback</th>
+<th>Date</th>
+
+</tr>
+
+</thead>
+
+<tbody id="feedbackTable">
+
+<tr>
+<td colspan="3">
+Loading feedback...
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div style="text-align:center">
+
+<button
+class="btn"
+onclick="clearBrowserCache()"
+>
+Clear Browser Session
+</button>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+<p>
+🛡 CyberShield © 2026
+</p>
+
+<p>
+Cyber Security Awareness & Assessment System
+</p>
+
+</footer>
+
+
+<script>
+
+/* =====================================================
+   GLOBAL DATA
+===================================================== */
+
+let currentVisitorId =
+    localStorage.getItem("currentVisitorId") || null;
+
+let currentVisitorName =
+    localStorage.getItem("currentVisitorName") || "";
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+let selectedRating = 0;
+
+
+/* =====================================================
+   REGISTRATION ELEMENT
+===================================================== */
+
+const registrationForm =
+    document.getElementById("registrationForm");
+
+
+/* =====================================================
+   SUB BRANCH DATA
+===================================================== */
+
+const subBranchData = {
+
+    "BCA":[
+        "General",
+        "Cyber Security",
+        "Artificial Intelligence",
+        "Machine Learning",
+        "Data Science",
+        "Cloud Computing",
+        "Web Development",
+        "Software Development"
+    ],
+
+    "B.Sc":[
+        "Computer Science",
+        "Information Technology",
+        "Physics",
+        "Chemistry",
+        "Mathematics",
+        "Biotechnology",
+        "Statistics"
+    ],
+
+    "BBA":[
+        "General",
+        "Finance",
+        "Marketing",
+        "Human Resource",
+        "International Business",
+        "Business Analytics"
+    ],
+
+    "B.Com":[
+        "General",
+        "Accounting & Finance",
+        "Banking & Insurance",
+        "Financial Management",
+        "Taxation"
+    ],
+
+    "B.A":[
+        "English",
+        "Marathi",
+        "Economics",
+        "Political Science",
+        "Psychology",
+        "Sociology",
+        "History",
+        "Geography"
+    ],
+
+    "B.E / B.Tech":[
+        "Computer Engineering",
+        "Information Technology",
+        "Artificial Intelligence",
+        "Data Science",
+        "Cyber Security",
+        "Electronics & Telecommunication",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Electrical Engineering"
+    ],
+
+    "MCA":[
+        "General",
+        "Cyber Security",
+        "Artificial Intelligence",
+        "Data Science",
+        "Cloud Computing",
+        "Software Development"
+    ],
+
+    "M.Sc":[
+        "Computer Science",
+        "Information Technology",
+        "Mathematics",
+        "Physics",
+        "Chemistry",
+        "Data Science"
+    ],
+
+    "MBA":[
+        "Finance",
+        "Marketing",
+        "Human Resource",
+        "Operations",
+        "Business Analytics",
+        "International Business"
+    ],
+
+    "M.Com":[
+        "Advanced Accounting",
+        "Finance",
+        "Banking",
+        "Taxation"
+    ],
+
+    "M.A":[
+        "English",
+        "Marathi",
+        "Economics",
+        "Psychology",
+        "Political Science",
+        "Sociology"
+    ],
+
+    "M.E / M.Tech":[
+        "Computer Engineering",
+        "Information Technology",
+        "Cyber Security",
+        "Artificial Intelligence",
+        "Data Science",
+        "Electronics"
+    ],
+
+    "Diploma":[
+        "Computer Engineering",
+        "Information Technology",
+        "Cyber Security",
+        "Mechanical Engineering",
+        "Civil Engineering",
+        "Electrical Engineering",
+        "Electronics"
+    ],
+
+    "ITI":[
+        "Electrician",
+        "Fitter",
+        "Computer Operator",
+        "Welder",
+        "Plumber",
+        "Mechanic",
+        "Other"
+    ],
+
+    "11th / 12th":[
+        "Science",
+        "Commerce",
+        "Arts"
+    ],
+
+    "Other":[
+        "General",
+        "Other"
+    ]
+
+};
+
+
+/* =====================================================
+   TOGGLE STUDENT FIELDS
+===================================================== */
+
+function toggleStudentFields(){
+
+    const status =
+        document.getElementById("studentStatus").value;
+
+    const studentFields =
+        document.querySelectorAll(".studentField");
+
+    const occupationField =
+        document.querySelector(".occupationField");
+
+    const educationLevel =
+        document.getElementById("educationLevel");
+
+    const year =
+        document.getElementById("year");
+
+    const branch =
+        document.getElementById("branch");
+
+    const subBranch =
+        document.getElementById("subBranch");
+
+    const occupation =
+        document.getElementById("occupation");
+
+
+    if(status === "Yes"){
+
+        studentFields.forEach(field => {
+            field.classList.remove("hidden");
+        });
+
+        occupationField.classList.add("hidden");
+
+        educationLevel.required = true;
+        year.required = true;
+        branch.required = true;
+
+        occupation.required = false;
+        occupation.value = "";
+
+    }
+
+    else if(status === "No"){
+
+        studentFields.forEach(field => {
+            field.classList.add("hidden");
+        });
+
+        occupationField.classList.remove("hidden");
+
+        educationLevel.required = false;
+        year.required = false;
+        branch.required = false;
+
+        occupation.required = true;
+
+        educationLevel.value = "";
+        year.value = "";
+        branch.value = "";
+
+        subBranch.innerHTML =
+            '<option value="">Select Sub Branch / Specialization</option>';
+
+    }
+
+    else{
+
+        studentFields.forEach(field => {
+            field.classList.add("hidden");
+        });
+
+        occupationField.classList.add("hidden");
+
+        educationLevel.required = false;
+        year.required = false;
+        branch.required = false;
+        occupation.required = false;
+
+    }
+
+}
+
+
+/* =====================================================
+   UPDATE SUB BRANCH
+===================================================== */
+
+function updateSubBranch(){
+
+    const branch =
+        document.getElementById("branch").value;
+
+    const subBranch =
+        document.getElementById("subBranch");
+
+    subBranch.innerHTML =
+        '<option value="">Select Sub Branch / Specialization</option>';
+
+
+    if(subBranchData[branch]){
+
+        subBranchData[branch].forEach(item => {
+
+            const option =
+                document.createElement("option");
+
+            option.value = item;
+            option.textContent = item;
+
+            subBranch.appendChild(option);
+
+        });
+
+    }
+
+}
+
+
+/* =====================================================
+   REGISTRATION → FLASK → SQLITE
+===================================================== */
+
+registrationForm.addEventListener(
+    "submit",
+    async function(e){
+
+        e.preventDefault();
+
+        const registerButton =
+            document.getElementById("registerButton");
+
+        const msg =
+            document.getElementById("registerMessage");
+
+        const status =
+            document.getElementById("studentStatus").value;
+
+
+        const registrationData = {
+
+            name:
+                document.getElementById("name").value.trim(),
+
+            age:
+                document.getElementById("age").value,
+
+            student_status:
+                status,
+
+            education_level:
+                status === "Yes"
+                ?
+                document.getElementById("educationLevel").value
+                :
+                "",
+
+            year:
+                status === "Yes"
+                ?
+                document.getElementById("year").value
+                :
+                "",
+
+            branch:
+                status === "Yes"
+                ?
+                document.getElementById("branch").value
+                :
+                "",
+
+            sub_branch:
+                status === "Yes"
+                ?
+                document.getElementById("subBranch").value
+                :
+                "",
+
+            occupation:
+                status === "No"
+                ?
+                document.getElementById("occupation").value
+                :
+                ""
+
+        };
+
+
+        registerButton.disabled = true;
+        registerButton.innerText = "Registering...";
+
+        msg.classList.remove("error");
+
+        msg.innerText =
+            "Saving registration to SQLite...";
+
+        msg.style.display = "block";
+
+
+        try{
+
+            const response =
+                await fetch(
+                    "/api/register",
+                    {
+                        method:"POST",
+
+                        headers:{
+                            "Content-Type":"application/json"
+                        },
+
+                        body:
+                            JSON.stringify(registrationData)
+                    }
+                );
+
+
+            const result =
+                await response.json();
+
+
+            if(response.ok && result.success){
+
+                currentVisitorId =
+                    result.visitor_id;
+
+                currentVisitorName =
+                    registrationData.name;
+
+
+                localStorage.setItem(
+                    "currentVisitorId",
+                    String(currentVisitorId)
+                );
+
+                localStorage.setItem(
+                    "currentVisitorName",
+                    currentVisitorName
+                );
+
+
+                msg.classList.remove("error");
+
+                msg.innerText =
+                    "✓ Registration successful! Registration ID: "
+                    + result.visitor_id;
+
+                msg.style.display = "block";
+
+
+                registrationForm.reset();
+
+                document
+                    .getElementById("subBranch")
+                    .innerHTML =
+                    '<option value="">Select Sub Branch / Specialization</option>';
+
+                toggleStudentFields();
+
+                await loadDashboard();
+
+            }
+
+            else{
+
+                msg.classList.add("error");
+
+                msg.innerText =
+                    result.message ||
+                    "Registration failed.";
+
+            }
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Registration Error:",
+                error
+            );
+
+            msg.classList.add("error");
+
+            msg.innerText =
+                "Unable to connect to Flask server. Please start app.py.";
+
+        }
+
+        finally{
+
+            registerButton.disabled = false;
+
+            registerButton.innerText =
+                "Register Visitor";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CHECK FLASK + SQLITE
+===================================================== */
+
+async function checkServerConnection(){
+
+    const status =
+        document.getElementById("serverStatus");
+
+    try{
+
+        const response =
+            await fetch("/api/database-test");
+
+        const result =
+            await response.json();
+
+        if(response.ok && result.success){
+
+            status.innerText =
+                "Backend: ✓ Connected to Flask & SQLite";
+
+            status.style.color = "#73ffbd";
+
+        }
+
+        else{
+
+            status.innerText =
+                "Backend: ✗ Database connection failed";
+
+            status.style.color = "#ff8da2";
+
+        }
+
+    }
+
+    catch(error){
+
+        status.innerText =
+            "Backend: ✗ Flask server is not running";
+
+        status.style.color = "#ff8da2";
+
+    }
+
+}
+
+
+/* =====================================================
+   QUIZ QUESTIONS
+===================================================== */
+
+const questions = [
+
+{
+    q:"Which of the following is the strongest password?",
+    options:[
+        "password123",
+        "Rahul123",
+        "R@hUl#92x!Kp",
+        "12345678"
+    ],
+    answer:2
+},
+
+{
+    q:"What is phishing?",
+    options:[
+        "A computer game",
+        "An attempt to steal information using fake messages or websites",
+        "A type of antivirus",
+        "A software update"
+    ],
+    answer:1
+},
+
+{
+    q:"Who should you share your OTP with?",
+    options:[
+        "Bank employee on phone",
+        "Friend",
+        "Nobody",
+        "Unknown caller"
+    ],
+    answer:2
+},
+
+{
+    q:"What should you do when using public Wi-Fi?",
+    options:[
+        "Share banking details",
+        "Disable all security",
+        "Avoid sensitive transactions when possible",
+        "Share your password"
+    ],
+    answer:2
+},
+
+{
+    q:"What is a major benefit of 2FA?",
+    options:[
+        "Faster internet",
+        "Extra layer of security",
+        "More storage",
+        "Free software"
+    ],
+    answer:1
+},
+
+{
+    q:"You receive a suspicious email link. What should you do?",
+    options:[
+        "Click immediately",
+        "Forward to everyone",
+        "Verify the sender and link before taking action",
+        "Enter your password"
+    ],
+    answer:2
+},
+
+{
+    q:"Why should software be updated regularly?",
+    options:[
+        "To change the wallpaper",
+        "To fix vulnerabilities and bugs",
+        "To delete files",
+        "To reduce security"
+    ],
+    answer:1
+},
+
+{
+    q:"Which information should NOT be shared publicly?",
+    options:[
+        "Favorite color",
+        "Passwords, OTPs and sensitive personal information",
+        "Favorite sport",
+        "Movie preference"
+    ],
+    answer:1
+},
+
+{
+    q:"What is ransomware?",
+    options:[
+        "Malware that encrypts files and demands payment",
+        "Antivirus software",
+        "A browser",
+        "A firewall"
+    ],
+    answer:0
+},
+
+{
+    q:"What should you do if you suspect cyber fraud?",
+    options:[
+        "Ignore it",
+        "Preserve evidence and report it to the relevant service provider/cybercrime authority",
+        "Share OTP",
+        "Delete everything immediately"
+    ],
+    answer:1
+}
+
+];
+
+
+/* =====================================================
+   START QUIZ
+===================================================== */
+
+function startQuiz(){
+
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+
+    document
+        .getElementById("quizStart")
+        .classList.add("hidden");
+
+    document
+        .getElementById("quizResult")
+        .classList.add("hidden");
+
+    document
+        .getElementById("quizArea")
+        .classList.remove("hidden");
+
+    document
+        .getElementById("certificate")
+        .style.display = "none";
+
+    showQuestion();
+
+}
+
+
+/* =====================================================
+   SHOW QUESTION
+===================================================== */
+
+function showQuestion(){
+
+    answered = false;
+
+    const q =
+        questions[currentQuestion];
+
+    document
+        .getElementById("questionNumber")
+        .innerText =
+        currentQuestion + 1;
+
+    document
+        .getElementById("questionText")
+        .innerText =
+        q.q;
+
+    document
+        .getElementById("quizFeedback")
+        .innerText = "";
+
+    document
+        .getElementById("progressBar")
+        .style.width =
+        ((currentQuestion + 1) / questions.length * 100)
+        + "%";
+
+    const optionsDiv =
+        document.getElementById("options");
+
+    optionsDiv.innerHTML = "";
+
+    q.options.forEach((option,index) => {
+
+        const div =
+            document.createElement("div");
+
+        div.className = "option";
+
+        div.innerText =
+            String.fromCharCode(65 + index)
+            + ". "
+            + option;
+
+        div.onclick =
+            () => selectAnswer(index,div);
+
+        optionsDiv.appendChild(div);
+
+    });
+
+}
+
+
+/* =====================================================
+   SELECT ANSWER
+===================================================== */
+
+function selectAnswer(index,element){
+
+    if(answered)
+        return;
+
+    answered = true;
+
+    const q =
+        questions[currentQuestion];
+
+    const options =
+        document.querySelectorAll(".option");
+
+    if(index === q.answer){
+
+        score++;
+
+        element.classList.add("correct");
+
+        document
+            .getElementById("quizFeedback")
+            .innerText =
+            "✓ Correct Answer!";
+
+    }
+
+    else{
+
+        element.classList.add("wrong");
+
+        options[q.answer]
+            .classList.add("correct");
+
+        document
+            .getElementById("quizFeedback")
+            .innerText =
+            "✗ Wrong Answer!";
+
+    }
+
+
+    setTimeout(() => {
+
+        currentQuestion++;
+
+        if(currentQuestion < questions.length){
+
+            showQuestion();
+
+        }
+
+        else{
+
+            finishQuiz();
+
+        }
+
+    },1000);
+
+}
+
+
+/* =====================================================
+   SAVE QUIZ TO SQLITE
+===================================================== */
+
+async function saveQuizToDatabase(){
+
+    const percentage =
+        Math.round(
+            (score / questions.length) * 100
+        );
+
+    try{
+
+        const response =
+            await fetch(
+                "/api/quiz-attempt",
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+
+                            visitor_id:
+                                currentVisitorId
+                                ?
+                                Number(currentVisitorId)
+                                :
+                                null,
+
+                            score:score,
+
+                            total_questions:
+                                questions.length,
+
+                            percentage:percentage
+
+                        })
+                }
+            );
+
+        const result =
+            await response.json();
+
+        return response.ok && result.success;
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Quiz database error:",
+            error
+        );
+
+        return false;
+
+    }
+
+}
+
+
+/* =====================================================
+   FINISH QUIZ
+===================================================== */
+
+async function finishQuiz(){
+
+    document
+        .getElementById("quizArea")
+        .classList.add("hidden");
+
+    document
+        .getElementById("quizResult")
+        .classList.remove("hidden");
+
+    const percentage =
+        Math.round(
+            (score / questions.length) * 100
+        );
+
+    document
+        .getElementById("finalScore")
+        .innerText =
+        percentage + "%";
+
+    let message = "";
+
+    if(percentage >= 80){
+
+        message =
+            "Excellent! You have strong cyber security awareness.";
+
+    }
+
+    else if(percentage >= 60){
+
+        message =
+            "Good job! Keep improving your cyber security knowledge.";
+
+    }
+
+    else{
+
+        message =
+            "Keep learning! Review the awareness and safety sections.";
+
+    }
+
+    document
+        .getElementById("resultText")
+        .innerText =
+        `You answered ${score} out of ${questions.length} questions correctly. ${message}`;
+
+    const saved =
+        await saveQuizToDatabase();
+
+    if(saved){
+
+        await loadDashboard();
+
+    }
+
+}
+
+
+/* =====================================================
+   RESTART QUIZ
+===================================================== */
+
+function restartQuiz(){
+
+    document
+        .getElementById("quizResult")
+        .classList.add("hidden");
+
+    startQuiz();
+
+}
+
+
+/* =====================================================
+   CERTIFICATE
+===================================================== */
+
+async function generateCertificate(){
+
+    let name =
+        currentVisitorName ||
+        localStorage.getItem("currentVisitorName") ||
+        "";
+
+    if(!name){
+
+        try{
+
+            const response =
+                await fetch("/api/visitors");
+
+            const result =
+                await response.json();
+
+            if(
+                response.ok &&
+                result.success &&
+                result.visitors.length > 0
+            ){
+
+                name =
+                    result.visitors[0].name;
+
+            }
+
+        }
+
+        catch(error){
+
+            console.error(
+                "Certificate name error:",
+                error
+            );
+
+        }
+
+    }
+
+    if(!name){
+
+        name =
+            "Cyber Security Learner";
+
+    }
+
+    const percentage =
+        Math.round(
+            (score / questions.length) * 100
+        );
+
+    document
+        .getElementById("certificateName")
+        .innerText =
+        name;
+
+    document
+        .getElementById("certificateScore")
+        .innerText =
+        percentage + "%";
+
+    document
+        .getElementById("certificateDate")
+        .innerText =
+        new Date().toLocaleDateString();
+
+    const certificate =
+        document.getElementById("certificate");
+
+    certificate.style.display = "block";
+
+    certificate.scrollIntoView({
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =====================================================
+   STAR RATING
+===================================================== */
+
+document
+    .querySelectorAll(".star")
+    .forEach(star => {
+
+        star.addEventListener(
+            "click",
+            function(){
+
+                selectedRating =
+                    Number(this.dataset.rating);
+
+                document
+                    .getElementById("rating")
+                    .value =
+                    selectedRating;
+
+                document
+                    .querySelectorAll(".star")
+                    .forEach(s => {
+
+                        s.classList.toggle(
+                            "active",
+                            Number(s.dataset.rating)
+                            <= selectedRating
+                        );
+
+                    });
+
+            }
+        );
+
+    });
+
+
+/* =====================================================
+   FEEDBACK → SQLITE
+===================================================== */
+
+document
+    .getElementById("feedbackForm")
+    .addEventListener(
+        "submit",
+        async function(e){
+
+            e.preventDefault();
+
+            if(selectedRating === 0){
+
+                alert("Please select a rating.");
+
+                return;
+
+            }
+
+            const feedbackText =
+                document
+                    .getElementById("feedbackText")
+                    .value.trim();
+
+            if(!feedbackText){
+
+                alert("Please write your feedback.");
+
+                return;
+
+            }
+
+            const feedbackButton =
+                document.getElementById("feedbackButton");
+
+            const feedbackMessage =
+                document.getElementById("feedbackMessage");
+
+            feedbackButton.disabled = true;
+            feedbackButton.innerText = "Saving...";
+
+            try{
+
+                const response =
+                    await fetch(
+                        "/api/feedback",
+                        {
+                            method:"POST",
+
+                            headers:{
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+
+                                    visitor_id:
+                                        currentVisitorId
+                                        ?
+                                        Number(currentVisitorId)
+                                        :
+                                        null,
+
+                                    rating:
+                                        selectedRating,
+
+                                    message:
+                                        feedbackText
+
+                                })
+                        }
+                    );
+
+                const result =
+                    await response.json();
+
+                if(response.ok && result.success){
+
+                    feedbackMessage.classList.remove("error");
+
+                    feedbackMessage.innerText =
+                        "✓ Thank you! Your feedback has been saved to SQLite.";
+
+                    feedbackMessage.style.display =
+                        "block";
+
+                    document
+                        .getElementById("feedbackForm")
+                        .reset();
+
+                    selectedRating = 0;
+
+                    document
+                        .querySelectorAll(".star")
+                        .forEach(s => {
+                            s.classList.remove("active");
+                        });
+
+                    await loadDashboard();
+
+                }
+
+                else{
+
+                    feedbackMessage.classList.add("error");
+
+                    feedbackMessage.innerText =
+                        result.message ||
+                        "Feedback submission failed.";
+
+                    feedbackMessage.style.display =
+                        "block";
+
+                }
+
+            }
+
+            catch(error){
+
+                console.error(
+                    "Feedback error:",
+                    error
+                );
+
+                feedbackMessage.classList.add("error");
+
+                feedbackMessage.innerText =
+                    "Unable to connect to Flask server.";
+
+                feedbackMessage.style.display =
+                    "block";
+
+            }
+
+            finally{
+
+                feedbackButton.disabled = false;
+
+                feedbackButton.innerText =
+                    "Submit Feedback";
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   LOAD COMPLETE DATABASE DASHBOARD
+===================================================== */
+
+async function loadDashboard(){
+
+    try{
+
+        const response =
+            await fetch("/api/dashboard");
+
+        const data =
+            await response.json();
+
+        if(!response.ok || !data.success){
+
+            console.error(
+                "Dashboard API error:",
+                data.message
+            );
+
+            return;
+
+        }
+
+        const visitors =
+            data.visitors || [];
+
+        const feedbacks =
+            data.feedback || [];
+
+
+        document
+            .getElementById("visitorCount")
+            .innerText =
+            data.visitor_count || 0;
+
+        document
+            .getElementById("quizAttempts")
+            .innerText =
+            data.quiz_attempts || 0;
+
+        document
+            .getElementById("averageScore")
+            .innerText =
+            Number(
+                data.average_score || 0
+            ).toFixed(0) + "%";
+
+
+        document
+            .getElementById("adminVisitors")
+            .innerText =
+            data.visitor_count || 0;
+
+        document
+            .getElementById("adminStudents")
+            .innerText =
+            data.students || 0;
+
+        document
+            .getElementById("adminNonStudents")
+            .innerText =
+            data.non_students || 0;
+
+        document
+            .getElementById("adminQuiz")
+            .innerText =
+            data.quiz_attempts || 0;
+
+        document
+            .getElementById("adminRating")
+            .innerText =
+            Number(
+                data.average_rating || 0
+            ).toFixed(1);
+
+
+        const visitorTable =
+            document.getElementById("visitorTable");
+
+        visitorTable.innerHTML = "";
+
+        if(visitors.length === 0){
+
+            visitorTable.innerHTML = `
+                <tr>
+                    <td colspan="10">
+                        No visitors registered yet.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+        else{
+
+            visitors.forEach(v => {
+
+                const row =
+                    document.createElement("tr");
+
+                row.innerHTML = `
+
+                    <td>${escapeHTML(v.id)}</td>
+
+                    <td>${escapeHTML(v.name)}</td>
+
+                    <td>${escapeHTML(v.age)}</td>
+
+                    <td>${escapeHTML(v.student_status)}</td>
+
+                    <td>
+                        ${escapeHTML(
+                            v.education_level || "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            v.year || "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            v.branch || "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            v.sub_branch || "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            v.occupation || "-"
+                        )}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(
+                            v.created_at || "-"
+                        )}
+                    </td>
+
+                `;
+
+                visitorTable.appendChild(row);
+
+            });
+
+        }
+
+
+        const feedbackTable =
+            document.getElementById("feedbackTable");
+
+        feedbackTable.innerHTML = "";
+
+        if(feedbacks.length === 0){
+
+            feedbackTable.innerHTML = `
+                <tr>
+                    <td colspan="3">
+                        No feedback submitted yet.
+                    </td>
+                </tr>
+            `;
+
+        }
+
+        else{
+
+            feedbacks.forEach(f => {
+
+                const row =
+                    document.createElement("tr");
+
+                const rating =
+                    Math.max(
+                        0,
+                        Math.min(
+                            5,
+                            Number(f.rating) || 0
+                        )
+                    );
+
+                row.innerHTML = `
+
+                    <td>
+                        ${"★".repeat(rating)}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(f.message)}
+                    </td>
+
+                    <td>
+                        ${escapeHTML(f.created_at)}
+                    </td>
+
+                `;
+
+                feedbackTable.appendChild(row);
+
+            });
+
+        }
+
+    }
+
+    catch(error){
+
+        console.error(
+            "Dashboard error:",
+            error
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   SECURITY
+===================================================== */
+
+function escapeHTML(value){
+
+    const div =
+        document.createElement("div");
+
+    div.innerText =
+        value ?? "";
+
+    return div.innerHTML;
+
+}
+
+
+/* =====================================================
+   CLEAR BROWSER SESSION ONLY
+===================================================== */
+
+function clearBrowserCache(){
+
+    const confirmDelete =
+        confirm(
+            "This will clear only browser session data. SQLite database records will NOT be deleted. Continue?"
+        );
+
+    if(!confirmDelete)
+        return;
+
+    localStorage.removeItem(
+        "currentVisitorId"
+    );
+
+    localStorage.removeItem(
+        "currentVisitorName"
+    );
+
+    currentVisitorId = null;
+    currentVisitorName = "";
+
+    alert(
+        "Browser session cleared. SQLite database data is unchanged."
+    );
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+toggleStudentFields();
+
+checkServerConnection();
+
+loadDashboard();
+
+</script>
+
+</body>
+
+</html>
