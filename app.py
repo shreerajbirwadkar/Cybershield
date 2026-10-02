@@ -1,449 +1,218 @@
 from flask import Flask, send_file, jsonify, request
-import sqlite3
 import os
+import psycopg2
+from psycopg2.extras import RealDictCursor
 
 app = Flask(__name__)
 
-# =====================================================
-# DATABASE PATH
-# =====================================================
+DATABASE_URL = os.environ.get("DATABASE_URL")
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-
-DATABASE_FOLDER = os.path.join(
-    BASE_DIR,
-    "database"
-)
-
-DATABASE = os.path.join(
-    DATABASE_FOLDER,
-    "cybershield.db"
-)
-
-os.makedirs(
-    DATABASE_FOLDER,
-    exist_ok=True
-)
-
-
-# =====================================================
-# DATABASE CONNECTION
-# =====================================================
 
 def get_db_connection():
+    if not DATABASE_URL:
+        raise Exception("DATABASE_URL environment variable is not set.")
 
-    conn = sqlite3.connect(
-        DATABASE
-    )
+    return psycopg2.connect(DATABASE_URL)
 
-    conn.row_factory = sqlite3.Row
-
-    # Enable foreign key support
-    conn.execute(
-        "PRAGMA foreign_keys = ON"
-    )
-
-    return conn
-
-
-# =====================================================
-# INITIALIZE DATABASE
-# =====================================================
 
 def init_database():
-
     conn = get_db_connection()
+    cursor = conn.cursor()
 
-    # =================================================
-    # VISITORS TABLE
-    # =================================================
-
-    conn.execute("""
+    # Visitors table
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS visitors (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
+            id SERIAL PRIMARY KEY,
             name TEXT NOT NULL,
-
             age INTEGER,
-
             student_status TEXT,
-
             education_level TEXT,
-
             year TEXT,
-
             branch TEXT,
-
             sub_branch TEXT,
-
             occupation TEXT,
-
-            created_at TIMESTAMP
-                DEFAULT CURRENT_TIMESTAMP
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     """)
 
-    # =================================================
-    # OLD DATABASE MIGRATION
-    # =================================================
-
-    columns = {
-        row["name"]
-        for row in conn.execute(
-            "PRAGMA table_info(visitors)"
-        ).fetchall()
-    }
-
-    if "education_level" not in columns:
-
-        conn.execute("""
-            ALTER TABLE visitors
-            ADD COLUMN education_level TEXT
-        """)
-
-    if "sub_branch" not in columns:
-
-        conn.execute("""
-            ALTER TABLE visitors
-            ADD COLUMN sub_branch TEXT
-        """)
-
-    # =================================================
-    # QUIZ ATTEMPTS TABLE
-    # =================================================
-
-    conn.execute("""
+    # Quiz attempts table
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS quiz_attempts (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
+            id SERIAL PRIMARY KEY,
             visitor_id INTEGER,
-
             score INTEGER NOT NULL,
-
             total_questions INTEGER NOT NULL,
-
             percentage REAL NOT NULL,
-
-            created_at TIMESTAMP
-                DEFAULT CURRENT_TIMESTAMP,
-
-            FOREIGN KEY(visitor_id)
-                REFERENCES visitors(id)
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(visitor_id) REFERENCES visitors(id)
         )
     """)
 
-    # =================================================
-    # FEEDBACK TABLE
-    # =================================================
-
-    conn.execute("""
+    # Feedback table
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS feedback (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
+            id SERIAL PRIMARY KEY,
             visitor_id INTEGER,
-
             rating INTEGER NOT NULL,
-
             message TEXT NOT NULL,
-
-            created_at TIMESTAMP
-                DEFAULT CURRENT_TIMESTAMP,
-
-            FOREIGN KEY(visitor_id)
-                REFERENCES visitors(id)
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY(visitor_id) REFERENCES visitors(id)
         )
     """)
 
-    # =================================================
-    # ADMINS TABLE
-    # =================================================
-
-    conn.execute("""
+    # Admins table
+    cursor.execute("""
         CREATE TABLE IF NOT EXISTS admins (
-
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-
+            id SERIAL PRIMARY KEY,
             username TEXT UNIQUE NOT NULL,
-
             password TEXT NOT NULL
         )
     """)
 
     conn.commit()
+    cursor.close()
     conn.close()
 
 
-# =====================================================
-# HOME PAGE
-# =====================================================
-
 @app.route("/")
 def home():
-
     return send_file(
-        os.path.join(
-            BASE_DIR,
-            "index.html"
-        )
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), "index.html")
     )
 
 
-# =====================================================
+# ----------------------------------------
 # DATABASE TEST
-# =====================================================
+# ----------------------------------------
 
-@app.route(
-    "/api/database-test",
-    methods=["GET"]
-)
+@app.route("/api/database-test", methods=["GET"])
 def database_test():
-
     try:
-
         conn = get_db_connection()
+        cursor = conn.cursor()
 
-        conn.execute(
-            "SELECT 1"
-        ).fetchone()
+        cursor.execute("SELECT 1")
+        cursor.fetchone()
 
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "message":
-                "SQLite database is connected!"
-
+            "message": "PostgreSQL database is connected!"
         })
 
     except Exception as e:
-
         return jsonify({
-
             "success": False,
-
             "message": str(e)
-
         }), 500
 
 
-# =====================================================
+# ----------------------------------------
 # REGISTER VISITOR
-# =====================================================
+# ----------------------------------------
 
-@app.route(
-    "/api/register",
-    methods=["POST"]
-)
+@app.route("/api/register", methods=["POST"])
 def register():
-
     try:
-
-        data = request.get_json(
-            silent=True
-        )
+        data = request.get_json(silent=True)
 
         if not data:
-
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "No registration data received."
-
+                "message": "No registration data received."
             }), 400
 
-        # -------------------------------------------------
-        # GET DATA
-        # -------------------------------------------------
-
-        name = str(
-            data.get(
-                "name",
-                ""
-            )
-        ).strip()
-
+        name = str(data.get("name", "")).strip()
         age = data.get("age")
-
         student_status = str(
-            data.get(
-                "student_status",
-                ""
-            )
+            data.get("student_status", "")
         ).strip()
 
         education_level = str(
-            data.get(
-                "education_level",
-                ""
-            )
+            data.get("education_level", "")
         ).strip()
 
         year = str(
-            data.get(
-                "year",
-                ""
-            )
+            data.get("year", "")
         ).strip()
 
         branch = str(
-            data.get(
-                "branch",
-                ""
-            )
+            data.get("branch", "")
         ).strip()
 
         sub_branch = str(
-            data.get(
-                "sub_branch",
-                ""
-            )
+            data.get("sub_branch", "")
         ).strip()
 
         occupation = str(
-            data.get(
-                "occupation",
-                ""
-            )
+            data.get("occupation", "")
         ).strip()
 
-        # -------------------------------------------------
-        # NAME VALIDATION
-        # -------------------------------------------------
-
+        # Name validation
         if not name:
-
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Full name is required."
-
+                "message": "Full name is required."
             }), 400
 
-        # -------------------------------------------------
-        # AGE VALIDATION
-        # -------------------------------------------------
-
+        # Age validation
         if age is None or age == "":
-
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Age is required."
-
+                "message": "Age is required."
             }), 400
 
         try:
-
             age = int(age)
-
-        except (
-            ValueError,
-            TypeError
-        ):
-
+        except (ValueError, TypeError):
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Age must be a valid number."
-
+                "message": "Age must be a valid number."
             }), 400
 
         if age < 10 or age > 100:
-
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Age must be between 10 and 100."
-
+                "message": "Age must be between 10 and 100."
             }), 400
 
-        # -------------------------------------------------
-        # STUDENT STATUS VALIDATION
-        # -------------------------------------------------
-
-        if student_status not in [
-            "Yes",
-            "No"
-        ]:
-
+        # Student status
+        if student_status not in ["Yes", "No"]:
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Please select whether you are a student."
-
+                "message": "Please select whether you are a student."
             }), 400
 
-        # -------------------------------------------------
-        # STUDENT VALIDATION
-        # -------------------------------------------------
-
+        # Student
         if student_status == "Yes":
 
             if not education_level:
-
                 return jsonify({
-
                     "success": False,
-
-                    "message":
-                        "Please select your education level."
-
+                    "message": "Please select your education level."
                 }), 400
 
             if not year:
-
                 return jsonify({
-
                     "success": False,
-
-                    "message":
-                        "Please select your year."
-
+                    "message": "Please select your year."
                 }), 400
 
             if not branch:
-
                 return jsonify({
-
                     "success": False,
-
-                    "message":
-                        "Please select your branch/course."
-
+                    "message": "Please select your branch/course."
                 }), 400
 
-        # -------------------------------------------------
-        # NON-STUDENT VALIDATION
-        # -------------------------------------------------
-
+        # Non-student
         if student_status == "No":
 
             if not occupation:
-
                 return jsonify({
-
                     "success": False,
-
-                    "message":
-                        "Please select your occupation."
-
+                    "message": "Please select your occupation."
                 }), 400
 
             education_level = ""
@@ -451,13 +220,10 @@ def register():
             branch = ""
             sub_branch = ""
 
-        # -------------------------------------------------
-        # SAVE VISITOR
-        # -------------------------------------------------
-
         conn = get_db_connection()
+        cursor = conn.cursor()
 
-        cursor = conn.execute("""
+        cursor.execute("""
             INSERT INTO visitors
             (
                 name,
@@ -469,9 +235,9 @@ def register():
                 sub_branch,
                 occupation
             )
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
+            RETURNING id
         """, (
-
             name,
             age,
             student_status,
@@ -480,53 +246,43 @@ def register():
             branch,
             sub_branch,
             occupation
-
         ))
 
-        visitor_id = cursor.lastrowid
+        visitor_id = cursor.fetchone()[0]
 
         conn.commit()
+
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "message":
-                "Registration successful! Data saved to SQLite.",
-
-            "visitor_id":
-                visitor_id
-
+            "message": "Registration successful! Data saved to PostgreSQL.",
+            "visitor_id": visitor_id
         }), 201
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                f"Registration failed: {str(e)}"
-
+            "message": f"Registration failed: {str(e)}"
         }), 500
 
 
-# =====================================================
-# GET ALL VISITORS
-# =====================================================
+# ----------------------------------------
+# GET VISITORS
+# ----------------------------------------
 
-@app.route(
-    "/api/visitors",
-    methods=["GET"]
-)
+@app.route("/api/visitors", methods=["GET"])
 def get_visitors():
 
     try:
 
         conn = get_db_connection()
 
-        rows = conn.execute("""
+        cursor = conn.cursor(cursor_factory=RealDictCursor)
+
+        cursor.execute("""
             SELECT
                 id,
                 name,
@@ -540,216 +296,141 @@ def get_visitors():
                 created_at
             FROM visitors
             ORDER BY id DESC
-        """).fetchall()
+        """)
 
+        rows = cursor.fetchall()
+
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "visitors":
-                [dict(row) for row in rows]
-
+            "visitors": rows
         })
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
             "message": str(e)
-
         }), 500
 
 
-# =====================================================
+# ----------------------------------------
 # VISITOR COUNT
-# =====================================================
+# ----------------------------------------
 
-@app.route(
-    "/api/visitors/count",
-    methods=["GET"]
-)
+@app.route("/api/visitors/count", methods=["GET"])
 def visitor_count():
 
     try:
 
         conn = get_db_connection()
+        cursor = conn.cursor()
 
-        result = conn.execute("""
-            SELECT COUNT(*) AS total
-            FROM visitors
-        """).fetchone()
+        cursor.execute("""
+            SELECT COUNT(*) FROM visitors
+        """)
 
+        total = cursor.fetchone()[0]
+
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "total":
-                result["total"]
-
+            "total": total
         })
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
             "message": str(e)
-
         }), 500
 
 
-# =====================================================
-# SAVE QUIZ ATTEMPT
-# =====================================================
+# ----------------------------------------
+# SAVE QUIZ
+# ----------------------------------------
 
-@app.route(
-    "/api/quiz-attempt",
-    methods=["POST"]
-)
+@app.route("/api/quiz-attempt", methods=["POST"])
 def save_quiz_attempt():
 
     try:
 
-        data = request.get_json(
-            silent=True
-        ) or {}
+        data = request.get_json(silent=True) or {}
 
-        visitor_id = data.get(
-            "visitor_id"
-        )
-
-        score = data.get(
-            "score"
-        )
-
-        total_questions = data.get(
-            "total_questions"
-        )
-
-        # -------------------------------------------------
-        # SCORE VALIDATION
-        # -------------------------------------------------
+        visitor_id = data.get("visitor_id")
+        score = data.get("score")
+        total_questions = data.get("total_questions")
 
         try:
-
             score = int(score)
+            total_questions = int(total_questions)
 
-            total_questions = int(
-                total_questions
-            )
-
-        except (
-            ValueError,
-            TypeError
-        ):
+        except (ValueError, TypeError):
 
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Invalid quiz score data."
-
+                "message": "Invalid quiz score data."
             }), 400
 
         if total_questions <= 0:
 
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Total questions must be greater than zero."
-
+                "message": "Total questions must be greater than zero."
             }), 400
 
         if score < 0 or score > total_questions:
 
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Invalid quiz score."
-
+                "message": "Invalid quiz score."
             }), 400
 
-        # -------------------------------------------------
-        # CALCULATE PERCENTAGE
-        # -------------------------------------------------
-
         percentage = round(
-            (
-                score /
-                total_questions
-            ) * 100,
+            (score / total_questions) * 100,
             2
         )
 
-        # -------------------------------------------------
-        # VALIDATE VISITOR ID
-        # -------------------------------------------------
-
-        if visitor_id in [
-            None,
-            "",
-            "null"
-        ]:
+        if visitor_id in [None, "", "null"]:
 
             visitor_id = None
 
         else:
 
             try:
+                visitor_id = int(visitor_id)
 
-                visitor_id = int(
-                    visitor_id
-                )
-
-            except (
-                ValueError,
-                TypeError
-            ):
+            except (ValueError, TypeError):
 
                 return jsonify({
-
                     "success": False,
-
-                    "message":
-                        "Invalid visitor ID."
-
+                    "message": "Invalid visitor ID."
                 }), 400
 
             conn = get_db_connection()
+            cursor = conn.cursor()
 
-            visitor = conn.execute("""
-                SELECT id
-                FROM visitors
-                WHERE id = ?
-            """, (
-                visitor_id,
-            )).fetchone()
+            cursor.execute(
+                "SELECT id FROM visitors WHERE id = %s",
+                (visitor_id,)
+            )
 
+            visitor = cursor.fetchone()
+
+            cursor.close()
             conn.close()
 
             if not visitor:
-
                 visitor_id = None
 
-        # -------------------------------------------------
-        # SAVE QUIZ
-        # -------------------------------------------------
-
         conn = get_db_connection()
+        cursor = conn.cursor()
 
-        cursor = conn.execute("""
+        cursor.execute("""
             INSERT INTO quiz_attempts
             (
                 visitor_id,
@@ -757,302 +438,184 @@ def save_quiz_attempt():
                 total_questions,
                 percentage
             )
-            VALUES (?, ?, ?, ?)
+            VALUES (%s, %s, %s, %s)
+            RETURNING id
         """, (
-
             visitor_id,
             score,
             total_questions,
             percentage
-
         ))
 
-        quiz_id = cursor.lastrowid
+        quiz_id = cursor.fetchone()[0]
 
         conn.commit()
+
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "message":
-                "Quiz attempt saved successfully.",
-
-            "quiz_id":
-                quiz_id,
-
-            "percentage":
-                percentage
-
+            "message": "Quiz attempt saved successfully.",
+            "quiz_id": quiz_id,
+            "percentage": percentage
         }), 201
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                f"Quiz save failed: {str(e)}"
-
+            "message": f"Quiz save failed: {str(e)}"
         }), 500
 
 
-# =====================================================
-# QUIZ STATISTICS
-# =====================================================
+# ----------------------------------------
+# QUIZ STATS
+# ----------------------------------------
 
-@app.route(
-    "/api/quiz-stats",
-    methods=["GET"]
-)
+@app.route("/api/quiz-stats", methods=["GET"])
 def quiz_stats():
 
     try:
 
         conn = get_db_connection()
+        cursor = conn.cursor()
 
-        result = conn.execute("""
+        cursor.execute("""
             SELECT
-
                 COUNT(*) AS attempts,
-
-                COALESCE(
-                    AVG(score),
-                    0
-                ) AS average_score,
-
-                COALESCE(
-                    AVG(percentage),
-                    0
-                ) AS average_percentage
-
+                COALESCE(AVG(percentage), 0) AS average_percentage
             FROM quiz_attempts
-        """).fetchone()
+        """)
 
+        result = cursor.fetchone()
+
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "attempts":
-                result["attempts"],
-
-            "average_score":
-                round(
-                    result["average_percentage"],
-                    1
-                )
-
+            "attempts": result[0],
+            "average_score": round(float(result[1]), 1)
         })
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
             "message": str(e)
-
         }), 500
 
 
-# =====================================================
+# ----------------------------------------
 # SAVE FEEDBACK
-# =====================================================
+# ----------------------------------------
 
-@app.route(
-    "/api/feedback",
-    methods=["POST"]
-)
+@app.route("/api/feedback", methods=["POST"])
 def save_feedback():
 
     try:
 
-        data = request.get_json(
-            silent=True
-        ) or {}
+        data = request.get_json(silent=True) or {}
 
-        visitor_id = data.get(
-            "visitor_id"
-        )
-
-        rating = data.get(
-            "rating"
-        )
-
+        visitor_id = data.get("visitor_id")
+        rating = data.get("rating")
         message = str(
-            data.get(
-                "message",
-                ""
-            )
+            data.get("message", "")
         ).strip()
 
-        # -------------------------------------------------
-        # RATING VALIDATION
-        # -------------------------------------------------
-
         try:
-
             rating = int(rating)
 
-        except (
-            ValueError,
-            TypeError
-        ):
+        except (ValueError, TypeError):
 
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Please select a valid rating."
-
+                "message": "Please select a valid rating."
             }), 400
 
         if rating < 1 or rating > 5:
 
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Rating must be between 1 and 5."
-
+                "message": "Rating must be between 1 and 5."
             }), 400
-
-        # -------------------------------------------------
-        # MESSAGE VALIDATION
-        # -------------------------------------------------
 
         if not message:
 
             return jsonify({
-
                 "success": False,
-
-                "message":
-                    "Please write your feedback."
-
+                "message": "Please write your feedback."
             }), 400
 
-        # -------------------------------------------------
-        # VISITOR ID
-        # -------------------------------------------------
-
-        if visitor_id in [
-            None,
-            "",
-            "null"
-        ]:
+        if visitor_id in [None, "", "null"]:
 
             visitor_id = None
 
         else:
 
             try:
+                visitor_id = int(visitor_id)
 
-                visitor_id = int(
-                    visitor_id
-                )
-
-            except (
-                ValueError,
-                TypeError
-            ):
+            except (ValueError, TypeError):
 
                 visitor_id = None
-
-        # -------------------------------------------------
-        # IF VISITOR ID EXISTS, CHECK IT
-        # -------------------------------------------------
-
-        if visitor_id is not None:
-
-            conn = get_db_connection()
-
-            visitor = conn.execute("""
-                SELECT id
-                FROM visitors
-                WHERE id = ?
-            """, (
-                visitor_id,
-            )).fetchone()
-
-            conn.close()
-
-            if not visitor:
-
-                visitor_id = None
-
-        # -------------------------------------------------
-        # SAVE FEEDBACK
-        # -------------------------------------------------
 
         conn = get_db_connection()
+        cursor = conn.cursor()
 
-        cursor = conn.execute("""
+        cursor.execute("""
             INSERT INTO feedback
             (
                 visitor_id,
                 rating,
                 message
             )
-            VALUES (?, ?, ?)
+            VALUES (%s, %s, %s)
+            RETURNING id
         """, (
-
             visitor_id,
             rating,
             message
-
         ))
 
-        feedback_id = cursor.lastrowid
+        feedback_id = cursor.fetchone()[0]
 
         conn.commit()
+
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "message":
-                "Feedback saved successfully.",
-
-            "feedback_id":
-                feedback_id
-
+            "message": "Feedback saved successfully.",
+            "feedback_id": feedback_id
         }), 201
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                f"Feedback save failed: {str(e)}"
-
+            "message": f"Feedback save failed: {str(e)}"
         }), 500
 
 
-# =====================================================
+# ----------------------------------------
 # GET FEEDBACK
-# =====================================================
+# ----------------------------------------
 
-@app.route(
-    "/api/feedback",
-    methods=["GET"]
-)
+@app.route("/api/feedback", methods=["GET"])
 def get_feedback():
 
     try:
 
         conn = get_db_connection()
 
-        rows = conn.execute("""
+        cursor = conn.cursor(
+            cursor_factory=RealDictCursor
+        )
+
+        cursor.execute("""
             SELECT
                 id,
                 visitor_id,
@@ -1061,49 +624,43 @@ def get_feedback():
                 created_at
             FROM feedback
             ORDER BY id DESC
-        """).fetchall()
+        """)
 
+        rows = cursor.fetchall()
+
+        cursor.close()
         conn.close()
 
         return jsonify({
-
             "success": True,
-
-            "feedback":
-                [dict(row) for row in rows]
-
+            "feedback": rows
         })
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
             "message": str(e)
-
         }), 500
 
 
-# =====================================================
-# COMPLETE DASHBOARD
-# =====================================================
+# ----------------------------------------
+# DASHBOARD
+# ----------------------------------------
 
-@app.route(
-    "/api/dashboard",
-    methods=["GET"]
-)
+@app.route("/api/dashboard", methods=["GET"])
 def dashboard():
 
     try:
 
         conn = get_db_connection()
 
-        # =================================================
-        # VISITORS
-        # =================================================
+        cursor = conn.cursor(
+            cursor_factory=RealDictCursor
+        )
 
-        visitors = conn.execute("""
+        # Visitors
+        cursor.execute("""
             SELECT
                 id,
                 name,
@@ -1117,13 +674,12 @@ def dashboard():
                 created_at
             FROM visitors
             ORDER BY id DESC
-        """).fetchall()
+        """)
 
-        # =================================================
-        # FEEDBACK
-        # =================================================
+        visitors = cursor.fetchall()
 
-        feedback = conn.execute("""
+        # Feedback
+        cursor.execute("""
             SELECT
                 id,
                 visitor_id,
@@ -1132,124 +688,97 @@ def dashboard():
                 created_at
             FROM feedback
             ORDER BY id DESC
-        """).fetchall()
+        """)
 
-        # =================================================
-        # QUIZ STATISTICS
-        # =================================================
+        feedback = cursor.fetchall()
 
-        quiz = conn.execute("""
+        # Quiz statistics
+        cursor.execute("""
             SELECT
-
                 COUNT(*) AS attempts,
-
-                COALESCE(
-                    AVG(percentage),
-                    0
-                ) AS average_percentage
-
+                COALESCE(AVG(percentage), 0)
+                AS average_percentage
             FROM quiz_attempts
-        """).fetchone()
+        """)
 
-        # =================================================
-        # STUDENT COUNT
-        # =================================================
+        quiz = cursor.fetchone()
 
-        students = conn.execute("""
+        # Students
+        cursor.execute("""
             SELECT COUNT(*) AS total
             FROM visitors
             WHERE student_status = 'Yes'
-        """).fetchone()
+        """)
 
-        # =================================================
-        # NON-STUDENT COUNT
-        # =================================================
+        students = cursor.fetchone()
 
-        non_students = conn.execute("""
+        # Non-students
+        cursor.execute("""
             SELECT COUNT(*) AS total
             FROM visitors
             WHERE student_status = 'No'
-        """).fetchone()
+        """)
 
-        # =================================================
-        # AVERAGE FEEDBACK RATING
-        # =================================================
+        non_students = cursor.fetchone()
 
-        rating = conn.execute("""
+        # Average rating
+        cursor.execute("""
             SELECT
-
-                COALESCE(
-                    AVG(rating),
-                    0
-                ) AS average_rating
-
+                COALESCE(AVG(rating), 0)
+                AS average_rating
             FROM feedback
-        """).fetchone()
+        """)
 
+        rating = cursor.fetchone()
+
+        cursor.close()
         conn.close()
-
-        # =================================================
-        # RESPONSE
-        # =================================================
 
         return jsonify({
 
             "success": True,
 
-            "visitor_count":
-                len(visitors),
+            "visitor_count": len(visitors),
 
-            "quiz_attempts":
-                quiz["attempts"],
+            "quiz_attempts": quiz["attempts"],
 
-            "average_score":
-                round(
-                    quiz["average_percentage"],
-                    1
-                ),
+            "average_score": round(
+                float(quiz["average_percentage"]),
+                1
+            ),
 
-            "students":
-                students["total"],
+            "students": students["total"],
 
-            "non_students":
-                non_students["total"],
+            "non_students": non_students["total"],
 
-            "average_rating":
-                round(
-                    rating["average_rating"],
-                    1
-                ),
+            "average_rating": round(
+                float(rating["average_rating"]),
+                1
+            ),
 
-            "visitors":
-                [dict(row) for row in visitors],
+            "visitors": visitors,
 
-            "feedback":
-                [dict(row) for row in feedback]
-
+            "feedback": feedback
         })
 
     except Exception as e:
 
         return jsonify({
-
             "success": False,
-
-            "message":
-                f"Dashboard error: {str(e)}"
-
+            "message": str(e)
         }), 500
 
 
-# =====================================================
+# ----------------------------------------
 # INITIALIZE DATABASE
-# =====================================================
+# ----------------------------------------
 
 init_database()
 
 
-# =====================================================
-# START FLASK SERVER
-# =====================================================
+# ----------------------------------------
+# START SERVER
+# ----------------------------------------
 
 if __name__ == "__main__":
 
@@ -1257,17 +786,12 @@ if __name__ == "__main__":
     print("======================================")
     print("       CyberShield Server Started")
     print("======================================")
-    print(
-        f"Database : {DATABASE}"
-    )
-    print(
-        "URL      : http://127.0.0.1:5000"
-    )
+    print("Database : PostgreSQL")
     print("======================================")
     print()
 
     app.run(
         debug=True,
-        host="127.0.0.1",
-        port=5000
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000))
     )
